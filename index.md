@@ -48,7 +48,7 @@ Summary:
 
 # Schematics 
 ![Headstone Image](Screenshot_2025-07-08_at_4.41.18_PM.jpg)
-![Headstone Image](logo.svg)
+![Headstone Image](Screenshot 2025-07-08 at 4.41.18 PM.jpg)
 
 # Code
 
