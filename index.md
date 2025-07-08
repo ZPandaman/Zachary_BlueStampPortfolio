@@ -47,8 +47,8 @@ Summary:
 - My current plan is to program my motor and then build the body of my project.
 
 # Schematics 
-![Headstone Image](Screenshot_2025-07-08_at_4.41.18_PM.jpg)
-![Headstone Image](Screenshot 2025-07-08 at 4.41.18 PM.jpg)
+![Headstone Image](#2.jpg)
+![Headstone Image](#1.jpg)
 
 # Code
 
