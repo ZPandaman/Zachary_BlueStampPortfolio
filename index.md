@@ -30,6 +30,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/8yCQyTd6C6A?si=BSUMwjBY3fnUcX5J" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
+
 - I have used a set program and downloaded it onto my Arduino, which can send it to my servo.
 - I've been surprised by how simple my project has been so far. Going into this, I thought it would be much more challenging to put everything together and make it run.
 - One interesting challenge I faced is that on the Arduino software, it is unclear of the location of the Check and Upload buttons.
@@ -38,6 +39,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 # First Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Kml1ljBbxgg?si=0Z-JtJnZRnDKTnNK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 - My project includes an Arduino and a Servo; they work together to create a moving motor that will release food after a set amount of time.   
 - I have created 2 schematics, which entail my plan for my project and my wiring of the servo and Arduino.
