@@ -47,9 +47,8 @@ Summary:
 - My current plan is to program my motor and then build the body of my project.
 
 # Schematics 
-![Headstone Image](#3.png)
-![Headstone Image](#4.png)
 <img src="#3.png" width="400" height="500">
+<img src="#4.png" width="400" height="500">
 
 # Code
 
