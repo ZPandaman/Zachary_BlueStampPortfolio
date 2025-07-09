@@ -32,21 +32,13 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/8yCQyTd6C6A?si=BSUMwjBY3fnUcX5J" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-I have successfully uploaded a pre-written program to my Arduino, which controls the servo motor as intended. So far, the development process has been more straightforward than I initially expected; I anticipated greater difficulty in assembling the components and getting the system operational.
-
-One minor challenge I encountered was navigating the Arduino IDE, particularly in locating the Verify (Check) and Upload functions, which were not immediately intuitive.
-
-As I prepare for the next project milestone, my focus will be on constructing the physical housing for the feeder, which will complete the first functional prototype.
+I have successfully uploaded a pre-written program to my Arduino, which controls the servo motor as intended. So far, the development process has been more straightforward than I initially expected; I anticipated greater difficulty in assembling the components and getting the system operational. My servo motor connects to my Arduino in 3 locations: PWM Port #9, 5V, and Ground. PWM Port #9 sends code from the Arduino to the servo motor. 5V powers the whole machine, and Ground prevents the machine from overloading. One minor challenge I encountered was navigating the Arduino IDE, particularly in locating the Verify (Check) and Upload functions, which were not immediately intuitive. As I prepare for the next project milestone, my focus will be on constructing the physical housing for the feeder, which will complete the first functional prototype.
 
 # First Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Kml1ljBbxgg?si=0Z-JtJnZRnDKTnNK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-My project utilizes an Arduino microcontroller in conjunction with a servo motor to create an automated mechanism that dispenses food after a predetermined interval.
-
-I have developed two schematics: one outlining the overall design and functional plan for the feeder, and another detailing the wiring connections between the Arduino and the servo. The hardware components have been correctly assembled, with the servo successfully interfaced with the Arduino.
-
-The next phase of the project involves programming the motor to execute the timed feeding function, followed by constructing the physical enclosure for the feeder system.
+My project utilizes an Arduino microcontroller in conjunction with a servo motor to create an automated mechanism that dispenses food after a predetermined interval. I have developed two schematics: one outlining the overall design and functional plan for the feeder, and another detailing the wiring connections between the Arduino and the servo. The hardware components have been correctly assembled, with the servo successfully interfaced with the Arduino. The next phase of the project involves programming the motor to execute the timed feeding function, followed by constructing the physical enclosure for the feeder system.
 
 # Schematics 
 ![Headstone Image](Bodydesign.svg)
