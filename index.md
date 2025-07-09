@@ -47,7 +47,7 @@ Summary:
 - My current plan is to program my motor and then build the body of my project.
 
 # Schematics 
-<img src= "#3.png" style="width:30%; height:30%;">
+<img src= "Bodydesign.svg" style="width:30%; height:30%;">
 <img src= "#4.png" style="width:30%; height:30%;">
 
 # Code
