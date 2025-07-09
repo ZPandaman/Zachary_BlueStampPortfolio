@@ -47,8 +47,8 @@ Summary:
 - My current plan is to program my motor and then build the body of my project.
 
 # Schematics 
-<img src= "Bodydesign.svg" style="width:30%; height:30%;">
-<img src= "electronicsArduino.svg" style="width:30%; height:30%;">
+![Headstone Image](Bodydesign.svg)
+![Headstone Image](electronicsArduino.svg)
 
 # Code
 
