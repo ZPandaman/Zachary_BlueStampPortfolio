@@ -48,7 +48,7 @@ Summary:
 
 # Schematics 
 ![Headstone Image](#3.png)
-![Headstone Image](#1.jpg)
+![Headstone Image](#4.png)
 
 # Code
 
