@@ -8,7 +8,7 @@ This project involves the development of an automated pet feeding system. Utiliz
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
-| Zachary S | Saratoga High School | Electrical Engineering | Incoming Senior
+| Zachary S | Saratoga High School | Electrical Engineering | Incoming Senior|
 <!---  
 **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 
