@@ -12,7 +12,7 @@ This project involves the development of an automated pet feeding system. Utiliz
 
 **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 
-![Headstone Image](logo.svg)
+<img src= "logo.svg" style="width:30%; height:30%;">
   
 # Final Milestone
 
@@ -47,8 +47,8 @@ Summary:
 - My current plan is to program my motor and then build the body of my project.
 
 # Schematics 
-![Headstone Image](#3.png)
-![Headstone Image](#4.png)
+<img src= "#3.png" style="width:30%; height:30%;">
+<img src= "#4.png" style="width:30%; height:30%;">
 
 # Code
 
