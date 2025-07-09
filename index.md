@@ -1,5 +1,5 @@
 # Automatic Arduino Pet Feeder
-This project is an automatic pet feeder that I will use to feed my dog. It is a complicated project that uses things such as motors to automatically dispense food at different times.
+This project is an automatic pet feeder that I will use to feed my dog. It is a project that uses things such as motors to automatically dispense food at different times.
 
 <!--- You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions: -->
 <!--- ```HTML  -->
@@ -49,6 +49,7 @@ Summary:
 # Schematics 
 ![Headstone Image](#3.png)
 ![Headstone Image](#4.png)
+<img src="#3.png" width="400" height="500">
 
 # Code
 
