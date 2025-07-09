@@ -48,7 +48,7 @@ Summary:
 
 # Schematics 
 <img src= "Bodydesign.svg" style="width:30%; height:30%;">
-<img src= "#4.png" style="width:30%; height:30%;">
+<img src= "electronicsArduino.svg" style="width:30%; height:30%;">
 
 # Code
 
