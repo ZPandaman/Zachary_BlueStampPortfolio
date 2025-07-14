@@ -5,7 +5,7 @@ This project involves the development of an automated pet feeding system. Utiliz
 <!--- ```HTML  -->
 <!--- This is an HTML comment in Markdown -->
 <!--- Anything between these symbols will not render on the published site -->
-![Headstone Image](ZackC_(1).svg)
+![Headstone Image](face.svg)
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 | Zachary S | Saratoga High School | Electrical Engineering | Incoming Senior|
