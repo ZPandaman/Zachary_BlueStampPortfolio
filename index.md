@@ -120,5 +120,5 @@ void loop() {
 
 # Additional Resources
 
-A 3D printer to print the holder of the servo that has a hole for the water bottle.
+A 3D printer is needed to print the holder of the servo that has a hole for the water bottle.
 
