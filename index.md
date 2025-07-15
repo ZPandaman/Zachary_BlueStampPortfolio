@@ -12,7 +12,7 @@ This project involves the development of an automated pet feeding system. Utiliz
 
 # Final Milestone
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=Er9wOi8vWgo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Er9wOi8vWgo?si=Dy5ZuS4dsCuHK4jM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 I have completed my pre-modifications auto pet feeder. For this milestone, my goal was simple: Assembly. This took a while. Originally, I had to wait a couple of days for the resources to arrive, then I got straight to work. Slowly, I attached pieces of wood until I had a completed body that could hold my bottle, Arduino, and servo (on a 3D-printed board). I faced a few challenges; however, they're important. Originally, I had the servo connected inversely, and I drilled too quickly, partially splitting wood.
 
