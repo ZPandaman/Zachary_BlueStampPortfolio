@@ -1,10 +1,6 @@
 # Automatic Arduino Pet Feeder
 This project involves the development of an automated pet feeding system. Utilizing an Arduino microcontroller and a servo motor, the device dispenses pre-measured portions of food at scheduled intervals. The goal is to create a reliable, user-friendly solution that ensures consistent feeding times, supports pet health, and offers convenience for pet owners.
 
-<!--- You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions: -->
-<!--- ```HTML  -->
-<!--- This is an HTML comment in Markdown -->
-<!--- Anything between these symbols will not render on the published site -->
 ![Headstone Image](photo.svg)
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
