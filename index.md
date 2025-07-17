@@ -31,64 +31,130 @@ My project utilizes an Arduino microcontroller in conjunction with a servo motor
 # Code
 
 ```c++
-#include <Servo.h>
+#include <ESP32Servo.h>
+#include "AdafruitIO_WiFi.h"
+#include "WiFi.h"
+#include "time.h"
 
-#define FEED_INTERVAL   1   // minutes between feeding time
+#define WIFI_SSID "J8-evencooler"
+#define WIFI_PASS "j8rocks!"
 
-const byte servoPin = 9;      // pin used to command the servo motor
-const int waitingTime = FEED_INTERVAL;
+#define IO_USERNAME  "zstanis"
+#define IO_KEY       "keyGoesHere"
 
-Servo servo;
+AdafruitIO_WiFi io(IO_USERNAME, IO_KEY, WIFI_SSID, WIFI_PASS);
 
-volatile unsigned long sec;
-const unsigned long feedInterval = (unsigned long) FEED_INTERVAL * (unsigned long) 5;  // expressed in seconds
+AdafruitIO_Feed *LastFeed = io.feed("LastFeed");
+AdafruitIO_Feed *delayFeed = io.feed("delay-time");
 
-/**
-   Stop the food from flowing
-*/
-void feederClose() {
-  servo.write(90);
-  delay(175);
-  servo.write(0);
-}
+Servo myservo;
+int servoPin = 18;
+int pos = 0;
+int userDelaySeconds = 0;
 
-/**
-   release a ration of food
-*/
-void feederOpen() {
-  servo.write(0);
-  delay(175);
-  servo.write(90);
-}
+String inputString = "";
+bool inputComplete = false;
 
-// Interrupt is called once a millisecond,
-SIGNAL(TIMER0_COMPA_vect)
-{
-  if (millis() % 1000 == 0) { // if a second has passed
-    sec++;  // increment the seconds counter
-    Serial.print("Second: ");
-    Serial.print(sec);
-    Serial.print(" of ");
-    Serial.println(feedInterval);
+void handleDelay(AdafruitIO_Data *data) {
+  int receivedDelay = data->toInt();
+  if (receivedDelay > 0 && receivedDelay <= 600) {
+    userDelaySeconds = receivedDelay;
+    Serial.print("Updated delay from Adafruit IO: ");
+    Serial.print(userDelaySeconds);
+    Serial.println(" seconds");
+  } else {
+    Serial.println("Invalid delay received from Adafruit IO");
   }
 }
 
 void setup() {
-  Serial.begin(9600);
-  OCR0A = 0xAF; // set the timer interrupt
-  TIMSK0 |= _BV(OCIE0A);
-  servo.attach(servoPin);
-  Serial.println("System initialized");
+  Serial.begin(115200);
+  while(!Serial);
+  Serial.print("Connecting to Adafruit IO");
+  io.connect();
+
+  delayFeed->onMessage(handleDelay);
+
+  while(io.status() < AIO_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("\nConnected to Adafruit IO");
+  delayFeed->get();
+
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+
+  myservo.setPeriodHertz(50);    
+  myservo.attach(servoPin, 1000, 2000); 
+
+  configTime(-7 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  Serial.println("Waiting for NTP time sync...");
+
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2) {
+    delay(500);
+    Serial.print(".");
+    now = time(nullptr);
+  }
+  Serial.println("\nTime synchronized!");
 }
 
 void loop() {
-  Serial.println("Waiting...");
-  sec = 0;  // reset the counter
-  while (feedInterval > sec);   // wait until the time interval is elapsed
-  Serial.println("Feeding the pet :)");
-  feederOpen();
-  delay(300);
-  feederClose();
+  io.run();
+  readSerialInput();
+
+  time_t now = time(nullptr);
+  struct tm timeinfo;
+  localtime_r(&now, &timeinfo);
+
+  char timeString[30];
+  strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
+
+  Serial.print("Sending time: ");
+  Serial.println(timeString);
+  LastFeed->save(timeString);
+
+  delay(userDelaySeconds * 1000);
+
+  for (pos = 180; pos >= 0; pos -= 1) {
+    myservo.write(pos);
+    delay(15);
+  }
+
+  for (pos = 0; pos <= 180; pos += 1) {
+    myservo.write(pos);
+    delay(15);
+  }
+}
+
+void readSerialInput() {
+  while (Serial.available()) {
+    char inChar = (char)Serial.read();
+    if (inChar == '\n') {
+      inputComplete = true;
+      break;
+    } else {
+      inputString += inChar;
+    }
+  }
+
+  if (inputComplete) {
+    int val = inputString.toInt();
+    if (val > 0) {
+      userDelaySeconds = val;
+      Serial.print("Updated delay via Serial: ");
+      Serial.print(userDelaySeconds);
+      Serial.println(" seconds");
+    } else {
+      Serial.println("Invalid input. Please enter a positive number.");
+    }
+    inputString = "";
+    inputComplete = false;
+  }
 }
 ```
 
