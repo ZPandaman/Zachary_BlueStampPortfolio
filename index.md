@@ -26,7 +26,7 @@ My project utilizes an Arduino microcontroller in conjunction with a servo motor
 
 # Schematics 
 ![Headstone Image](Bodydesign.svg)
-![Headstone Image](electronicsArduino.svg)
+![Headstone Image](sceelec.svg)
 
 # Code
 
