@@ -10,7 +10,7 @@ This project involves the development of an automated pet feeding system. Utiliz
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/X7v8JUUDjqg?si=OB0PsUtb3qg2t7TQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-I have expanded my project to include a website where users can change feeding times, feed, and check the last time food was dispensed through a Wi-Fi connection. I switched my Arduino to an ESP32, which has an additional feature of Bluetooth connection. I changed the majority of my code to be more editable, allowing for easy bug fixes and editing.
+I have expanded my project to include a website where users can change feeding times, feed, and check the last time food was dispensed through a Wi-Fi connection. I switched my Arduino to an ESP32, which has an additional feature of Bluetooth connection. I changed the majority of my code to be more editable, allowing for easy bug fixes and editing. When switching to an ESP32, it no longer has a 5V output but instead a 3.3V output, so I have to switch my servo to be powered by a battery pack.
 
 # Final Milestone
 
@@ -34,7 +34,7 @@ My project utilizes an Arduino microcontroller in conjunction with a servo motor
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/h47uthwTUgk?si=v59A54_-x_ONo7Ym" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For my starter project, I soldered together multiple parts of a retro arcade console and controller. The project allowed me to learn how to solder and connect wires.  
+For my starter project, I soldered together multiple parts of a retro arcade console and controller. I soldered things such as matrix LEDs, buzzers, buttons, and switches following a step-by-step guide. The project allowed me to learn how to solder and connect wires.  
 
 # Schematics 
 ![Headstone Image](Bodydesign.svg)
@@ -52,12 +52,13 @@ For my starter project, I soldered together multiple parts of a retro arcade con
 #define WIFI_PASS "j8rocks!"
 
 #define IO_USERNAME  "zstanis"
-#define IO_KEY       "keyGoesHere"
+#define IO_KEY       "key_goes_here"
 
 AdafruitIO_WiFi io(IO_USERNAME, IO_KEY, WIFI_SSID, WIFI_PASS);
 
 AdafruitIO_Feed *LastFeed = io.feed("LastFeed");
 AdafruitIO_Feed *delayFeed = io.feed("delay-time");
+AdafruitIO_Feed *trigger = io.feed("trigger-servo");
 
 Servo myservo;
 int servoPin = 18;
@@ -67,41 +68,38 @@ int userDelaySeconds = 0;
 String inputString = "";
 bool inputComplete = false;
 
-void handleDelay(AdafruitIO_Data *data) {
-  int receivedDelay = data->toInt();
-  if (receivedDelay > 0 && receivedDelay <= 600) {
-    userDelaySeconds = receivedDelay;
-    Serial.print("Updated delay from Adafruit IO: ");
-    Serial.print(userDelaySeconds);
-    Serial.println(" seconds");
-  } else {
-    Serial.println("Invalid delay received from Adafruit IO");
-  }
-}
+unsigned long delayStartMillis = 0;
+bool waitingForDelay = false;
+bool readyToDispense = false;
+
+void handleDelay(AdafruitIO_Data *data);
+void handleTrigger(AdafruitIO_Data *data);
 
 void setup() {
   Serial.begin(115200);
-  while(!Serial);
+  while (!Serial);
   Serial.print("Connecting to Adafruit IO");
   io.connect();
 
   delayFeed->onMessage(handleDelay);
+  trigger->onMessage(handleTrigger);
 
-  while(io.status() < AIO_CONNECTED) {
+  while (io.status() < AIO_CONNECTED) {
     Serial.print(".");
     delay(500);
   }
 
   Serial.println("\nConnected to Adafruit IO");
   delayFeed->get();
+  trigger->get();   
 
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
   ESP32PWM::allocateTimer(2);
   ESP32PWM::allocateTimer(3);
 
-  myservo.setPeriodHertz(50);    
-  myservo.attach(servoPin, 1000, 2000); 
+  myservo.setPeriodHertz(50);
+  myservo.attach(servoPin, 1000, 2000);
 
   configTime(-7 * 3600, 0, "pool.ntp.org", "time.nist.gov");
   Serial.println("Waiting for NTP time sync...");
@@ -113,24 +111,59 @@ void setup() {
     now = time(nullptr);
   }
   Serial.println("\nTime synchronized!");
+
+  startDelayCountdown();
 }
 
 void loop() {
   io.run();
   readSerialInput();
 
+  if (waitingForDelay && millis() - delayStartMillis >= userDelaySeconds * 1000UL) {
+    waitingForDelay = false;
+    readyToDispense = true;
+  }
+
+  if (readyToDispense) {
+    dispense();
+    readyToDispense = false;
+    startDelayCountdown();
+  }
+}
+
+void handleDelay(AdafruitIO_Data *data) {
+  int receivedDelay = data->toInt();
+  if (receivedDelay > 0 && receivedDelay <= 600) {
+    userDelaySeconds = receivedDelay;
+    Serial.print("Updated delay from Adafruit IO: ");
+    Serial.print(userDelaySeconds);
+    Serial.println(" seconds");
+    startDelayCountdown();
+  } else {
+    Serial.println("Invalid delay received from Adafruit IO");
+  }
+}
+
+void handleTrigger(AdafruitIO_Data *data) {
+  Serial.print("Trigger received: ");
+  Serial.println(data->value());
+
+  if (data->toInt() == 1) {
+    dispense();              
+    startDelayCountdown(); 
+  }
+}
+
+void dispense() {
   time_t now = time(nullptr);
   struct tm timeinfo;
   localtime_r(&now, &timeinfo);
-
   char timeString[30];
   strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
   Serial.print("Sending time: ");
   Serial.println(timeString);
   LastFeed->save(timeString);
-
-  delay(userDelaySeconds * 1000);
 
   for (pos = 180; pos >= 0; pos -= 1) {
     myservo.write(pos);
@@ -141,6 +174,11 @@ void loop() {
     myservo.write(pos);
     delay(15);
   }
+}
+
+void startDelayCountdown() {
+  delayStartMillis = millis();
+  waitingForDelay = true;
 }
 
 void readSerialInput() {
@@ -161,6 +199,7 @@ void readSerialInput() {
       Serial.print("Updated delay via Serial: ");
       Serial.print(userDelaySeconds);
       Serial.println(" seconds");
+      startDelayCountdown(); 
     } else {
       Serial.println("Invalid input. Please enter a positive number.");
     }
@@ -168,6 +207,7 @@ void readSerialInput() {
     inputComplete = false;
   }
 }
+
 ```
 
 # Bill of Materials
