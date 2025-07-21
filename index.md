@@ -241,4 +241,5 @@ void readSerialInput() {
 # Additional Resources
 
 A 3D printer is needed to print the holder of the servo that has a hole for the water bottle.
+A Computer is needed to code and power the project.
 
