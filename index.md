@@ -6,11 +6,17 @@ This project involves the development of an automated pet feeding system. Utiliz
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 | Zachary S | Saratoga High School | Electrical Engineering | Incoming Senior|
 
+# Modifications Milestone
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/X7v8JUUDjqg?si=OB0PsUtb3qg2t7TQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+I have expanded my project to include a website where users can change feeding times, feed, and check the last time food was dispensed through a Wi-Fi connection. I switched my Arduino to an ESP32, which has an additional feature of Bluetooth connection. I changed the majority of my code to be more editable, allowing for easy bug fixes and editing.
+
 # Final Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Er9wOi8vWgo?si=Dy5ZuS4dsCuHK4jM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-I have completed my pre-modifications auto pet feeder. For this milestone, my goal was simple: Assembly. This took a while. Originally, I had to wait a couple of days for the resources to arrive, then I got straight to work. Slowly, I attached pieces of wood until I had a completed body that could hold my bottle, Arduino, and servo (on a 3D-printed board). I faced a few challenges; however, they're important. Originally, I had the servo connected inversely, and I drilled too quickly, partially splitting wood.
+I have completed my pre-modifications auto pet feeder. For this milestone, my goal was simple: Assembly. This took a while. Originally, I had to wait a couple of days for the resources to arrive, then I got straight to work. Slowly, I attached pieces of wood until I had a completed body that could hold my bottle, Arduino, and servo (on a 3D-printed board). I faced a few challenges; however, they're important. Originally, I had the servo connected in the wrong direction, and I drilled too quickly, partially splitting the wood.
 
 # Second Milestone
 
@@ -23,6 +29,12 @@ I have successfully uploaded a pre-written program to my Arduino, which controls
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Kml1ljBbxgg?si=0Z-JtJnZRnDKTnNK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 My project utilizes an Arduino microcontroller in conjunction with a servo motor to create an automated mechanism that dispenses food after a predetermined interval. I have developed two schematics: one outlining the overall design and functional plan for the feeder, and another detailing the wiring connections between the Arduino and the servo. The hardware components have been correctly assembled, with the servo successfully interfaced with the Arduino. The next phase of the project involves programming the motor to execute the timed feeding function, followed by constructing the physical enclosure for the feeder system.
+
+# Starter Project Milestone
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/h47uthwTUgk?si=v59A54_-x_ONo7Ym" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+For my starter project, I soldered together multiple parts of a retro arcade console and controller. The project allowed me to learn how to solder and connect wires.  
 
 # Schematics 
 ![Headstone Image](Bodydesign.svg)
