@@ -43,94 +43,49 @@ For my starter project, I soldered together multiple parts of a retro arcade con
 # Code
 
 ```c++
-#include <ESP32Servo.h>
-#include "AdafruitIO_WiFi.h"
-#include "WiFi.h"
-#include "time.h"
+#include <ESP32Servo.h>             // Library for controlling servos on ESP32
+#include "AdafruitIO_WiFi.h"        // Adafruit IO library for IoT connectivity
+#include "WiFi.h"                   // ESP32 WiFi library
+#include "time.h"                   // Library for handling time functions
 
-#define WIFI_SSID "J8-evencooler"
-#define WIFI_PASS "j8rocks!"
-
+// --- WiFi & Adafruit IO Credentials ---
+#define WIFI_SSID "j10-wifi"
+#define WIFI_PASS "penguins"
 #define IO_USERNAME  "zstanis"
-#define IO_KEY       "key_goes_here"
+#define IO_KEY       "aio key"
 
+// Initialize Adafruit IO WiFi object with credentials
 AdafruitIO_WiFi io(IO_USERNAME, IO_KEY, WIFI_SSID, WIFI_PASS);
 
-AdafruitIO_Feed *LastFeed = io.feed("LastFeed");
-AdafruitIO_Feed *delayFeed = io.feed("delay-time");
-AdafruitIO_Feed *trigger = io.feed("trigger-servo");
+// --- Define Feeds for Adafruit IO ---
+AdafruitIO_Feed *LastFeed = io.feed("LastFeed");               // Feed to store timestamp of last dispense
+AdafruitIO_Feed *delayFeed = io.feed("delay-time");            // Feed to receive delay time between dispenses
+AdafruitIO_Feed *trigger = io.feed("trigger-servo");           // Feed to manually trigger dispense
+AdafruitIO_Feed *ultrasonicFeed = io.feed("ultrasonic-distance");  // Feed to send ultrasonic distance data
 
+// --- Servo Setup ---
 Servo myservo;
-int servoPin = 18;
-int pos = 0;
-int userDelaySeconds = 0;
+int servoPin = 18;                      // GPIO pin for servo
+int pos = 0;                            // Position for servo
+int userDelaySeconds = 0;              // Delay between dispenses in seconds
 
-String inputString = "";
-bool inputComplete = false;
+// --- Serial Input Handling ---
+String inputString = "";               // Buffer for incoming serial input
+bool inputComplete = false;           // Flag for complete input line
 
-unsigned long delayStartMillis = 0;
-bool waitingForDelay = false;
-bool readyToDispense = false;
+// --- Non-blocking delay logic ---
+unsigned long delayStartMillis = 0;    // Timestamp when delay started
+bool waitingForDelay = false;          // Flag indicating delay is in progress
+bool readyToDispense = false;          // Flag indicating it's time to dispense
 
-void handleDelay(AdafruitIO_Data *data);
-void handleTrigger(AdafruitIO_Data *data);
+// --- Ultrasonic Sensor Pins ---
+#define trigPin 4
+#define echoPin 2
 
-void setup() {
-  Serial.begin(115200);
-  while (!Serial);
-  Serial.print("Connecting to Adafruit IO");
-  io.connect();
+unsigned long lastUltrasonicSend = 0;               // Timestamp of last ultrasonic data send
+const unsigned long ultrasonicInterval = 10000;     // Interval for sending ultrasonic data (10 seconds)
 
-  delayFeed->onMessage(handleDelay);
-  trigger->onMessage(handleTrigger);
-
-  while (io.status() < AIO_CONNECTED) {
-    Serial.print(".");
-    delay(500);
-  }
-
-  Serial.println("\nConnected to Adafruit IO");
-  delayFeed->get();
-  trigger->get();   
-
-  ESP32PWM::allocateTimer(0);
-  ESP32PWM::allocateTimer(1);
-  ESP32PWM::allocateTimer(2);
-  ESP32PWM::allocateTimer(3);
-
-  myservo.setPeriodHertz(50);
-  myservo.attach(servoPin, 1000, 2000);
-
-  configTime(-7 * 3600, 0, "pool.ntp.org", "time.nist.gov");
-  Serial.println("Waiting for NTP time sync...");
-
-  time_t now = time(nullptr);
-  while (now < 8 * 3600 * 2) {
-    delay(500);
-    Serial.print(".");
-    now = time(nullptr);
-  }
-  Serial.println("\nTime synchronized!");
-
-  startDelayCountdown();
-}
-
-void loop() {
-  io.run();
-  readSerialInput();
-
-  if (waitingForDelay && millis() - delayStartMillis >= userDelaySeconds * 1000UL) {
-    waitingForDelay = false;
-    readyToDispense = true;
-  }
-
-  if (readyToDispense) {
-    dispense();
-    readyToDispense = false;
-    startDelayCountdown();
-  }
-}
-
+// --- Handle delay-time updates from Adafruit IO ---
 void handleDelay(AdafruitIO_Data *data) {
   int receivedDelay = data->toInt();
   if (receivedDelay > 0 && receivedDelay <= 600) {
@@ -138,23 +93,97 @@ void handleDelay(AdafruitIO_Data *data) {
     Serial.print("Updated delay from Adafruit IO: ");
     Serial.print(userDelaySeconds);
     Serial.println(" seconds");
-    startDelayCountdown();
+    startDelayCountdown();  // Restart timer
   } else {
     Serial.println("Invalid delay received from Adafruit IO");
   }
 }
 
+// --- Handle manual trigger from Adafruit IO ---
 void handleTrigger(AdafruitIO_Data *data) {
-  Serial.print("Trigger received: ");
-  Serial.println(data->value());
-
   if (data->toInt() == 1) {
-    dispense();              
-    startDelayCountdown(); 
+    Serial.println("Manual trigger received.");
+    dispense();
+    startDelayCountdown();  // Restart cooldown timer
   }
 }
 
+// --- Setup Function ---
+void setup() {
+  Serial.begin(115200);                // Start serial communication
+  while (!Serial);                     // Wait for serial monitor to connect (for native USB)
+  
+  Serial.print("Connecting to Adafruit IO");
+  io.connect();                        // Connect to Adafruit IO
+
+  // Set up feed handlers
+  delayFeed->onMessage(handleDelay);
+  trigger->onMessage(handleTrigger);
+
+  // Wait for connection to Adafruit IO
+  while (io.status() < AIO_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("\nConnected to Adafruit IO");
+
+  delayFeed->get();  // Fetch initial delay value from Adafruit IO
+
+  // Setup the servo PWM on available ESP32 timers
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+  myservo.setPeriodHertz(50);             // Set standard 50Hz PWM for servo
+  myservo.attach(servoPin, 1000, 2000);    // Attach servo with min/max pulse widths
+
+  // Setup time synchronization using NTP
+  configTime(-7 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  Serial.println("Waiting for NTP time sync...");
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2) {             // Wait until valid time is received
+    delay(500);
+    Serial.print(".");
+    now = time(nullptr);
+  }
+  Serial.println("\nTime synchronized!");
+
+  // Setup ultrasonic sensor pins
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  startDelayCountdown();  // Start initial wait timer
+}
+
+// --- Main Loop ---
+void loop() {
+  io.run();               // Handle Adafruit IO events
+  readSerialInput();      // Check for input from Serial monitor
+
+  // Check if it's time to dispense based on delay
+  if (waitingForDelay && millis() - delayStartMillis >= userDelaySeconds * 1000UL) {
+    waitingForDelay = false;
+    readyToDispense = true;
+  }
+
+  // Dispense if the timer expired
+  if (readyToDispense) {
+    dispense();
+    readyToDispense = false;
+    startDelayCountdown();  // Restart delay
+  }
+
+  // Send ultrasonic reading every 10 seconds
+  if (millis() - lastUltrasonicSend >= ultrasonicInterval) {
+    sendUltrasonicDistance();
+    lastUltrasonicSend = millis();
+  }
+}
+
+// --- Dispense routine: moves servo and logs timestamp to Adafruit IO ---
 void dispense() {
+  // Get current time
   time_t now = time(nullptr);
   struct tm timeinfo;
   localtime_r(&now, &timeinfo);
@@ -163,24 +192,51 @@ void dispense() {
 
   Serial.print("Sending time: ");
   Serial.println(timeString);
-  LastFeed->save(timeString);
+  LastFeed->save(timeString);  // Send timestamp to feed
 
+  // Rotate servo 180 to 0
   for (pos = 180; pos >= 0; pos -= 1) {
     myservo.write(pos);
-    delay(15);
+    delay(15);  // Smooth movement
   }
 
+  // Rotate servo back 0 to 180
   for (pos = 0; pos <= 180; pos += 1) {
     myservo.write(pos);
     delay(15);
   }
 }
 
+// --- Read distance from ultrasonic sensor and send result to Adafruit IO ---
+void sendUltrasonicDistance() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  long duration = pulseIn(echoPin, HIGH, 30000);  // Measure echo time (max 30ms)
+  int distance = duration * 0.034 / 2;            // Convert to cm
+
+  Serial.print("Measured distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // Send distance category to feed (1 = close, 2 = far)
+  if (distance > 12) {
+    ultrasonicFeed->save(2);  // Far
+  } else {
+    ultrasonicFeed->save(1);  // Close
+  }
+}
+
+// --- Start or restart the countdown timer ---
 void startDelayCountdown() {
   delayStartMillis = millis();
   waitingForDelay = true;
 }
 
+// --- Handle user input from Serial monitor for delay updates ---
 void readSerialInput() {
   while (Serial.available()) {
     char inChar = (char)Serial.read();
@@ -192,6 +248,7 @@ void readSerialInput() {
     }
   }
 
+  // When complete input is received, process it
   if (inputComplete) {
     int val = inputString.toInt();
     if (val > 0) {
@@ -199,7 +256,7 @@ void readSerialInput() {
       Serial.print("Updated delay via Serial: ");
       Serial.print(userDelaySeconds);
       Serial.println(" seconds");
-      startDelayCountdown(); 
+      startDelayCountdown();  // Restart delay
     } else {
       Serial.println("Invalid input. Please enter a positive number.");
     }
