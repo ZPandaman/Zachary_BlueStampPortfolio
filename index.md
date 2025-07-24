@@ -36,6 +36,9 @@ I have successfully uploaded a pre-written program to my Arduino, which controls
 
 My project utilizes an Arduino microcontroller in conjunction with a servo motor to create an automated mechanism that dispenses food after a predetermined interval. I have developed two schematics: one outlining the overall design and functional plan for the feeder, and another detailing the wiring connections between the Arduino and the servo. The hardware components have been correctly assembled, with the servo successfully interfaced with the Arduino. The next phase of the project involves programming the motor to execute the timed feeding function, followed by constructing the physical enclosure for the feeder system.
 
+Here is the schematic for my Arduino and Servo:
+![Headstone Image](arduino.svg)
+
 # Starter Project Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/h47uthwTUgk?si=v59A54_-x_ONo7Ym" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
