@@ -12,11 +12,17 @@ This project involves the development of an automated pet feeding system. Utiliz
 
 I have expanded my project to include a website where users can change feeding times, feed, and check the last time food was dispensed through a Wi-Fi connection. I switched my Arduino to an ESP32, which has an additional feature of Bluetooth connection. I changed the majority of my code to be more editable, allowing for easy bug fixes and editing. When switching to an ESP32, it no longer has a 5V output but instead a 3.3V output, so I have to switch my servo to be powered by a battery pack.
 
+Here is the schematic for the wiring:
+![Headstone Image](sceelec.svg)
+
 # Final Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Er9wOi8vWgo?si=Dy5ZuS4dsCuHK4jM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 I have completed my pre-modifications auto pet feeder. For this milestone, my goal was simple: Assembly. This took a while. Originally, I had to wait a couple of days for the resources to arrive, then I got straight to work. Slowly, I attached pieces of wood until I had a completed body that could hold my bottle, Arduino, and servo (on a 3D-printed board). I faced a few challenges; however, they're important. Originally, I had the servo connected in the wrong direction, and I drilled too quickly, partially splitting the wood.
+
+Here is the schematic for the body:
+![Headstone Image](Bodydesign.svg)
 
 # Second Milestone
 
@@ -36,9 +42,6 @@ My project utilizes an Arduino microcontroller in conjunction with a servo motor
 
 For my starter project, I soldered together multiple parts of a retro arcade console and controller. I soldered things such as matrix LEDs, buzzers, buttons, and switches following a step-by-step guide. The project allowed me to learn how to solder and connect wires.  
 
-# Schematics 
-![Headstone Image](Bodydesign.svg)
-![Headstone Image](sceelec.svg)
 
 # Code
 
