@@ -32,6 +32,9 @@ Body design for pet feeder:
 
 I have successfully uploaded a pre-written program to my Arduino, which controls the servo motor as intended. So far, the development process has been more straightforward than I initially expected; I anticipated greater difficulty in assembling the components and getting the system operational. My servo motor is connected to my Arduino in three locations: PWM Port #9, 5V, and Ground. PWM Port #9 sends code from the Arduino to the servo motor. 5V powers the whole machine, and Ground prevents the machine from overloading. One minor challenge I encountered was navigating the Arduino IDE, particularly in locating the Verify (Check) and Upload functions, which were not immediately intuitive. As I prepare for the next project milestone, my focus will be on constructing the physical housing for the feeder, which will complete the first functional prototype.
 
+Link to Website with Code:
+<a href="https://www.instructables.com/Automatic-Arduino-Pet-Feeder/"> Link </a>
+
 # First Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Kml1ljBbxgg?si=0Z-JtJnZRnDKTnNK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
